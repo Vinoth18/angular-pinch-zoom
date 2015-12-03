@@ -74,8 +74,8 @@ angular.module('ngPinchZoom', [])
      * @param {object} evt
      */
     function touchstartHandler(evt) {
-      startX = evt.touches[0].clientX;
-      startY = evt.touches[0].clientY;
+      startX = evt.originalEvent.touches[0].clientX;
+      startY = evt.originalEvent.touches[0].clientY;
       initialPositionX = positionX;
       initialPositionY = positionY;
       moveX = 0;
@@ -88,21 +88,21 @@ angular.module('ngPinchZoom', [])
     function touchmoveHandler(evt) {
 
       if (mode === '') {
-        if (evt.touches.length === 1 && scale > 1) {
+        if (evt.originalEvent.touches.length === 1 && scale > 1) {
 
           mode = 'swipe';
 
-        } else if (evt.touches.length === 2) {
+        } else if (evt.originalEvent.touches.length === 2) {
 
           mode = 'pinch';
 
           initialScale = scale;
           initialDistance = getDistance(evt);
-          originX = evt.touches[0].clientX -
-                    parseInt((evt.touches[0].clientX - evt.touches[1].clientX) / 2, 10) -
+          originX = evt.originalEvent.touches[0].clientX -
+                    parseInt((evt.originalEvent.touches[0].clientX - evt.originalEvent.touches[1].clientX) / 2, 10) -
                     element[0].offsetLeft - initialPositionX;
-          originY = evt.touches[0].clientY -
-                    parseInt((evt.touches[0].clientY - evt.touches[1].clientY) / 2, 10) -
+          originY = evt.originalEvent.touches[0].clientY -
+                    parseInt((evt.originalEvent.touches[0].clientY - evt.originalEvent.touches[1].clientY) / 2, 10) -
                     element[0].offsetTop - initialPositionY;
 
         }
@@ -111,8 +111,8 @@ angular.module('ngPinchZoom', [])
       if (mode === 'swipe') {
         evt.preventDefault();
 
-        moveX = evt.touches[0].clientX - startX;
-        moveY = evt.touches[0].clientY - startY;
+        moveX = evt.originalEvent.touches[0].clientX - startX;
+        moveY = evt.originalEvent.touches[0].clientY - startY;
 
         positionX = initialPositionX + moveX;
         positionY = initialPositionY + moveY;
@@ -139,7 +139,7 @@ angular.module('ngPinchZoom', [])
      */
     function touchendHandler(evt) {
 
-      if (mode === '' || evt.touches.length > 0) {
+      if (mode === '' || evt.originalEvent.touches.length > 0) {
         return;
       }
 
@@ -180,8 +180,8 @@ angular.module('ngPinchZoom', [])
      * @return {number}
      */
     function getDistance(evt) {
-      var d = Math.sqrt(Math.pow(evt.touches[0].clientX - evt.touches[1].clientX, 2) +
-                        Math.pow(evt.touches[0].clientY - evt.touches[1].clientY, 2));
+      var d = Math.sqrt(Math.pow(evt.originalEvent.touches[0].clientX - evt.originalEvent.touches[1].clientX, 2) +
+                        Math.pow(evt.originalEvent.touches[0].clientY - evt.originalEvent.touches[1].clientY, 2));
       return parseInt(d, 10);
     }
 
