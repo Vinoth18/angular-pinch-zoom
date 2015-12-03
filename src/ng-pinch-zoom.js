@@ -106,6 +106,9 @@ angular.module('ngPinchZoom', [])
      * @param {object} evt
      */
     function touchstartHandler(evt) {
+      if(evt.originalEvent.touches.length > 2) {
+        return;
+      }
       startX = evt.originalEvent.touches[0].clientX;
       startY = evt.originalEvent.touches[0].clientY;
       initialPositionX = positionX;
