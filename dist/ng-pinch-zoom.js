@@ -144,6 +144,8 @@ angular.module('ngPinchZoom', [])
         return;
       }
 
+      scale = scale ? scale : 0;
+
       if (scale < 1) {
 
         scale = 1;
