@@ -63,12 +63,44 @@ angular.module('ngPinchZoom', [])
       element.on('touchstart', touchstartHandler);
       element.on('touchmove', touchmoveHandler);
       element.on('touchend', touchendHandler);
+
+      var DblClickInterval = 300;
+      var firstClickTime;
+      var waitingSecondClick = false;
+
+      element.on('click', function(e) {
+        if (!waitingSecondClick) {
+          firstClickTime = (new Date()).getTime();
+          waitingSecondClick = true;
+
+          setTimeout(function() {
+            waitingSecondClick = false;
+          }, DblClickInterval);
+        } else {
+          waitingSecondClick = false;
+
+          var time = (new Date()).getTime();
+          if (time - firstClickTime < DblClickInterval) {
+            resetElement(e);
+          }
+        }
+      });
     };
 
     if (attrs.ngSrc) {
       image.src = attrs.ngSrc;
     } else {
       image.src = attrs.src;
+    }
+
+    /**
+     * @param {object} evt
+     */
+    function resetElement(evt) {
+      scale = 1;
+      positionX = 0;
+      positionY = 0;
+      transformElement();
     }
 
     /**
